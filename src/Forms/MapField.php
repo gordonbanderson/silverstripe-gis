@@ -29,6 +29,15 @@ class MapField extends FormField
     private static $default_zoom = 13;
 
     /**
+     * The initial layer to show when editing.  The only other permitted value is 'satellite', anything else will
+     * default to 'streets' in order that a map appears in the editing widget
+     *
+     * @var string
+     */
+    private static $initial_layer = 'streets';
+
+
+    /**
      * Whether the user can create complex gemoetries like e.g. MultiPoints
      *
      * @var boolean
@@ -118,5 +127,10 @@ class MapField extends FormField
     public function getMultiEnabled()
     {
         return $this->multiEnabled;
+    }
+
+    public function getInitialLayer()
+    {
+        return Config::inst()->get(MapField::class, 'initial_layer');
     }
 }
