@@ -59,7 +59,10 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
 
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
+	<!--
+	The following rule clashes with this one
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
+	-->
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
@@ -87,9 +90,15 @@
 	<rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
 
 	<rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
+    <!-- 7.4
 	<rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
+	-->
 	<rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
-	<rule ref="SlevomatCodingStandard.Functions.TrailingCommaInCall"/>
+
+    <!-- PHP >= 7.3
+        <rule ref="SlevomatCodingStandard.Functions.TrailingCommaInCall"/>
+        -->
+
 	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
@@ -109,7 +118,6 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
-	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
