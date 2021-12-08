@@ -8,6 +8,8 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use Smindel\GIS\GIS;
 
+// @phpcs:disable Generic.Files.LineLength.TooLong
+// @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
 class GISTest extends SapphireTest
 {
     public function setUp(): void

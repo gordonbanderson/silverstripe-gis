@@ -8,6 +8,8 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use Smindel\GIS\GIS;
 
+// @phpcs:disable Generic.Files.LineLength.TooLong
+// @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
 class GeoJsonServiceTest extends FunctionalTest
 {
     protected static $fixture_file = 'TestLocation.yml';
@@ -37,7 +39,8 @@ class GeoJsonServiceTest extends FunctionalTest
     }
 
 
-    public static function getExtraDataObjects()
+    /** @return array<string> */
+    public static function getExtraDataObjects(): array
     {
         return [TestLocation::class];
     }
