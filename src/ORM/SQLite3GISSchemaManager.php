@@ -1,28 +1,35 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\ORM;
 
-use SilverStripe\SQLite\SQLite3SchemaManager;
 use SilverStripe\ORM\DB;
-use Smindel\GIS\GIS;
+use SilverStripe\SQLite\SQLite3SchemaManager;
 
-if (!class_exists(SQLite3SchemaManager::class)) return;
+if (!\class_exists(SQLite3SchemaManager::class)) {
+    return;
+}
 
 class SQLite3GISSchemaManager extends SQLite3SchemaManager
 {
+
     use GISSchemaManager;
 
     protected static $is_initialised = false;
 
-    public function initialise()
+    public function initialise(): void
     {
-        if (!self::$is_initialised) {
-            $connector = DB::get_connector()->getRawConnector();
-            $connector->loadExtension('mod_spatialite.so');
-            $connector->exec("SELECT InitSpatialMetadata()");
-            self::$is_initialised = true;
+        if (self::$is_initialised) {
+            return;
         }
+
+        $connector = DB::get_connector()->getRawConnector();
+        $connector->loadExtension('mod_spatialite.so');
+        $connector->exec("SELECT InitSpatialMetadata()");
+        self::$is_initialised = true;
     }
+
 
     public function geography($values)
     {
@@ -30,21 +37,27 @@ class SQLite3GISSchemaManager extends SQLite3SchemaManager
         return 'geometry';
     }
 
+
     public function translateStGeometryTypeFilter($field, $value, $inclusive)
     {
-        $null = $inclusive ? '' : ' OR ' . DB::get_conn()->nullCheckClause($field, true);
-        $fragment = sprintf(
+        $null = $inclusive
+            ? ''
+            : ' OR ' . DB::get_conn()->nullCheckClause($field, true);
+        $fragment = \sprintf(
             '%sLOWER(ST_GeometryType(%s)) = ?%s',
             $inclusive ? '' : 'NOT ',
             $field,
             $null
         );
-        return [$fragment => strtolower($value)];
+
+        return [$fragment => \strtolower($value)];
     }
+
 
     public function translateBasicSelectGeo()
     {
         DB::get_schema()->initialise();
+
         return 'CASE WHEN %s IS NULL THEN NULL ELSE \'SRID=\' || ST_SRID(%s) || \';\' || ST_AsText(%s) END AS "%s"';
     }
 }

@@ -1,43 +1,39 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\ORM\Filters;
 
-use SilverStripe\ORM\Filters\SearchFilter;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\Filters\SearchFilter;
 
 class StGeometryTypeFilter extends SearchFilter
 {
     /**
      * Applies an exact match (equals) on a field value.
-     *
-     * @param DataQuery $query
-     * @return DataQuery
      */
-    protected function applyOne(DataQuery $query)
+    protected function applyOne(DataQuery $query): DataQuery
     {
         return $this->oneFilter($query, true);
     }
 
+
     /**
      * Excludes an exact match (equals) on a field value.
-     *
-     * @param DataQuery $query
-     * @return DataQuery
      */
-    protected function excludeOne(DataQuery $query)
+    protected function excludeOne(DataQuery $query): DataQuery
     {
         return $this->oneFilter($query, false);
     }
 
+
     /**
      * Applies a single match, either as inclusive or exclusive
      *
-     * @param DataQuery $query
      * @param bool $inclusive True if this is inclusive, or false if exclusive
-     * @return DataQuery
      */
-    protected function oneFilter(DataQuery $query, $inclusive)
+    protected function oneFilter(DataQuery $query, bool $inclusive): DataQuery
     {
         $this->model = $query->applyRelation($this->relation);
         $field = $this->getDbName();
@@ -46,6 +42,7 @@ class StGeometryTypeFilter extends SearchFilter
         // Null comparison check
         if ($value === null) {
             $where = DB::get_conn()->nullCheckClause($field, $inclusive);
+
             return $query->where($where);
         }
 

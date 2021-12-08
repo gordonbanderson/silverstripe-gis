@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Control;
 
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Control\Controller;
-use SilverStripe\Core\Config\Config;
 use Smindel\GIS\GIS;
 
 class GeoJsonService extends AbstractGISWebServiceController
 {
     private static $url_handlers = array(
-        '$Model' => 'handleAction',
-    );
+        '$Model' => 'handleAction';
+    private );
 
     public function getConfig($model)
     {
@@ -20,12 +19,16 @@ class GeoJsonService extends AbstractGISWebServiceController
             return false;
         }
         $defaults = [
-            'property_map' => singleton($model)->summaryFields(),
+            'property_map' => \singleton($model)->summaryFields(),
         ];
-        return is_array($modelConfig) ? array_merge($defaults, $modelConfig) : $defaults;
+
+        return \is_array($modelConfig)
+            ? \array_merge($defaults, $modelConfig)
+            : $defaults;
     }
 
-    public function index($request)
+
+    public function index($request): void
     {
         $model = $this->getModel($request);
         $config = $this->getConfig($model);
@@ -33,13 +36,13 @@ class GeoJsonService extends AbstractGISWebServiceController
 
         $propertyMap = $config['property_map'];
 
-        header('Access-Control-Allow-Origin: ' . $config['access_control_allow_origin']);
+        \header('Access-Control-Allow-Origin: ' . $config['access_control_allow_origin']);
 
         // The HTTP kernel keeps a copy of the response body, which
         // can exhaust the memory limit for large data sets. So we
         // opt out and flush the buffer after processing each feature.
-        if (!($is_test = headers_sent())) {
-            header('Content-Type: application/geo+json');
+        if (!($is_test = \headers_sent())) {
+            \header('Content-Type: application/geo+json');
         }
         echo '{"type":"FeatureCollection","features":[';
 
@@ -48,7 +51,9 @@ class GeoJsonService extends AbstractGISWebServiceController
                 continue;
             }
 
-            echo isset($geo) ? ',' : '';
+            echo isset($geo)
+                ? ','
+                : '';
 
             $geo = GIS::create($item->{$config['geometry_field']})->reproject(4326);
 
@@ -60,9 +65,9 @@ class GeoJsonService extends AbstractGISWebServiceController
             $feature = [
                 'type' => 'Feature',
                 'properties' => $properties,
-                'geometry' => ['type' => $geo->type]
+                'geometry' => ['type' => $geo->type],
             ];
-            if ($geo->type == GIS::TYPES['geometrycollection']) {
+            if ($geo->type === GIS::TYPES['geometrycollection']) {
                 $geometries = [];
                 foreach ($geo->geometries as $geometry) {
                     $geometries[] = [
@@ -70,11 +75,11 @@ class GeoJsonService extends AbstractGISWebServiceController
                         'coordinates' => $geometry->coordinates,
                     ];
                 }
-                $feature['geometry']['geometries'] =  $geometries;
+                $feature['geometry']['geometries'] = $geometries;
             } else {
-                $feature['geometry']['coordinates'] =  $geo->coordinates;
+                $feature['geometry']['coordinates'] = $geo->coordinates;
             }
-            echo json_encode($feature);
+            echo \json_encode($feature);
         }
         echo ']}';
         if (!$is_test) {

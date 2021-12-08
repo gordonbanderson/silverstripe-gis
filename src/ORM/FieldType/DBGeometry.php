@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\ORM\FieldType;
 
 use SilverStripe\ORM\DB;
@@ -12,13 +14,15 @@ class DBGeometry extends DBGeography
     public function __construct($name = null, $srid = null, $options = [])
     {
         $this->srid = $srid;
+
         parent::__construct($name, $options);
     }
+
 
     /**
      * Add the field to the underlying database.
      */
-    public function requireField()
+    public function requireField(): void
     {
         DB::require_field(
             $this->tableName,
@@ -27,15 +31,17 @@ class DBGeometry extends DBGeography
                 'type'=>'geometry',
                 'parts' => [
                     'srid' => $this->srid,
-                ]
+                ],
             ]
         );
     }
+
 
     public function compositeDatabaseFields()
     {
         return ['' => 'Geometry'];
     }
+
 
     public function prepValueForDB($value)
     {

@@ -1,24 +1,22 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Control;
 
-use SilverStripe\Control\Controller;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Security\Security;
-use SilverStripe\Security\Permission;
-use SilverStripe\ORM\DB;
-use Smindel\GIS\GIS;
-use Smindel\GIS\Service\Tile;
-use Smindel\GIS\Model\Raster;
-use SilverStripe\Assets\File;
 use Exception;
+use SilverStripe\Assets\File;
+use SilverStripe\Core\Config\Config;
+use Smindel\GIS\GIS;
+use Smindel\GIS\Model\Raster;
+use Smindel\GIS\Service\Tile;
 
 class WebMapTileService extends AbstractGISWebServiceController
 {
     private static $url_handlers = array(
-        '$Model//$ID!/$z!/$x!/$y!' => 'handleAction',
-        '$Model//$z!/$x!/$y!' => 'handleAction',
-    );
+        '$Model//$ID!/$z!/$x!/$y!' => 'handleAction';
+    private '$Model//$z!/$x!/$y!' => 'handleAction';
+    private );
 
     /**
      * Buffer in pixel by wich the tile box is enlarged, which is used for
@@ -62,26 +60,27 @@ class WebMapTileService extends AbstractGISWebServiceController
         $model = $this->model = $this->getModel($request);
         $config = $this->getConfig($model);
 
-        if (
-            ($cache = $config['cache_ttl'] ? sha1(json_encode($request->getVars())) : false)
+        if (($cache = $config['cache_ttl'] ? \sha1(\json_encode($request->getVars())) : false)
             && ($age = $this->cacheAge($cache)) !== false
             && $config['cache_ttl'] > $age
         ) {
             $response = $this->getResponse();
             $response->addHeader('Content-Type', 'image/png');
             $response->setBody($this->readCache($cache));
+
             return $response;
         }
 
         $renderer = Config::inst()->get($this->getModel($request), 'tile_renderer');
         $response = $this->$renderer($request);
 
-        if ($cache && $response->getStatusCode() == 200) {
+        if ($cache && $response->getStatusCode() === 200) {
             $this->writeCache($cache, $response->getBody());
         }
 
         return $response;
     }
+
 
     public function vector_renderer($request)
     {
@@ -102,9 +101,9 @@ class WebMapTileService extends AbstractGISWebServiceController
         $geometryField = $config['geometry_field'];
 
         $bufferSize = $config['tile_buffer'];
-        if (!is_array($bufferSize)) {
-            $bufferSize = array_fill(0, 4, $bufferSize);
-        } elseif (count($bufferSize) == 2) {
+        if (!\is_array($bufferSize)) {
+            $bufferSize = \array_fill(0, 4, $bufferSize);
+        } elseif (\count($bufferSize) === 2) {
             $bufferSize += $bufferSize;
         }
 
@@ -145,10 +144,11 @@ class WebMapTileService extends AbstractGISWebServiceController
         return $response;
     }
 
+
     public function raster_renderer($request)
     {
         $model = $this->model = $this->getModel($request);
-        if (is_a($model, File::class, true)) {
+        if (\is_a($model, File::class, true)) {
             $file = $model::get()->byID($request->param('ID'));
             if (!$file) {
                 return $this->getResponse()->setStatusCode(404);
@@ -156,9 +156,9 @@ class WebMapTileService extends AbstractGISWebServiceController
             if (!$file->canView()) {
                 return $this->getResponse()->setStatusCode(403);
             }
-            $raster = new Raster(PUBLIC_PATH . $file->getURL());
-        } else if (is_a($model, Raster::class, true)) {
-            $raster = singleton($model);
+            $raster = new Raster(\PUBLIC_PATH . $file->getURL());
+        } elseif (\is_a($model, Raster::class, true)) {
+            $raster = \singleton($model);
         } else {
             throw new Exception('Cannot render tile from ' . $model);
         }
@@ -170,11 +170,11 @@ class WebMapTileService extends AbstractGISWebServiceController
         list($lon1, $lat1) = Tile::zxy2lonlat($z, $x, $y);
         list($lon2, $lat2) = Tile::zxy2lonlat($z, $x + 1, $y + 1);
 
-        list($x1, $y1) = ($srid = $raster->getSrid()) == 4326
+        list($x1, $y1) = ($srid = $raster->getSrid()) === 4326
             ? [$lon1, $lat1]
             : GIS::create(['srid' => 4326, 'type' => 'Point', 'coordinates' => [$lon1, $lat1]])
             ->reproject($srid)->coordinates;
-        list($x2, $y2) = ($srid = $raster->getSrid()) == 4326
+        list($x2, $y2) = ($srid = $raster->getSrid()) === 4326
             ? [$lon2, $lat2]
             : GIS::create(['srid' => 4326, 'type' => 'Point', 'coordinates' => [$lon2, $lat2]])
             ->reproject($srid)->coordinates;
@@ -185,39 +185,45 @@ class WebMapTileService extends AbstractGISWebServiceController
         return $response
             ->addHeader('Content-Type', 'image/png')
             ->setBody($raster->translateRaster(
-                [$x1, $y1], [$x2, $y2],
-                $tile_size_x, $tile_size_y
+                [$x1, $y1],
+                [$x2, $y2],
+                $tile_size_x,
+                $tile_size_y
             ));
     }
 
+
     protected function cacheFile($cache)
     {
-        $dir = $this->getConfig($this->model)['cache_path'] . DIRECTORY_SEPARATOR;
-        $dir = $dir[0] != DIRECTORY_SEPARATOR
-            ? TEMP_PATH . DIRECTORY_SEPARATOR . $dir
+        $dir = $this->getConfig($this->model)['cache_path'] . \DIRECTORY_SEPARATOR;
+        $dir = $dir[0] !== \DIRECTORY_SEPARATOR
+            ? \TEMP_PATH . \DIRECTORY_SEPARATOR . $dir
             : $dir;
 
-        if (!file_exists($dir)) {
-            mkdir($dir, fileperms(TEMP_PATH), true);
+        if (!\file_exists($dir)) {
+            \mkdir($dir, \fileperms(\TEMP_PATH), true);
         }
 
         return $dir . $cache;
     }
 
+
     protected function cacheAge($cache)
     {
-        return is_readable($file = $this->cacheFile($cache))
-            ? time() - filemtime($file)
+        return \is_readable($file = $this->cacheFile($cache))
+            ? \time() - \filemtime($file)
             : false;
     }
 
+
     protected function readCache($cache)
     {
-        return file_get_contents($this->cacheFile($cache));
+        return \file_get_contents($this->cacheFile($cache));
     }
 
-    protected function writeCache($cache, $data)
+
+    protected function writeCache($cache, $data): void
     {
-        file_put_contents($this->cacheFile($cache), $data);
+        \file_put_contents($this->cacheFile($cache), $data);
     }
 }

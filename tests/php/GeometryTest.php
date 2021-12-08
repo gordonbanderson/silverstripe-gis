@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Tests;
 
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\DB;
 use Smindel\GIS\GIS;
 
 class GeometryTest extends GeographyTest
@@ -27,15 +28,17 @@ class GeometryTest extends GeographyTest
         11 => 10,
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         // reset GIS environment
         Config::modify()->set(GIS::class, 'default_srid', 0);
         Config::modify()->set(GIS::class, 'projections', [
             0 => null,
         ]);
+
         parent::setUp();
     }
+
 
     public static function getExtraDataObjects()
     {

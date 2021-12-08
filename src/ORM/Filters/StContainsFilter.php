@@ -1,44 +1,40 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\ORM\Filters;
 
-use SilverStripe\ORM\Filters\SearchFilter;
+use ReflectionClass;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\DB;
-use ReflectionClass;
+use SilverStripe\ORM\Filters\SearchFilter;
 
 class StContainsFilter extends SearchFilter
 {
     /**
      * Applies an exact match (equals) on a field value.
-     *
-     * @param DataQuery $query
-     * @return DataQuery
      */
-    protected function applyOne(DataQuery $query)
+    protected function applyOne(DataQuery $query): DataQuery
     {
         return $this->oneFilter($query, true);
     }
 
+
     /**
      * Excludes an exact match (equals) on a field value.
-     *
-     * @param DataQuery $query
-     * @return DataQuery
      */
-    protected function excludeOne(DataQuery $query)
+    protected function excludeOne(DataQuery $query): DataQuery
     {
         return $this->oneFilter($query, false);
     }
 
+
     /**
      * Applies a single match, either as inclusive or exclusive
      *
-     * @param DataQuery $query
      * @param bool $inclusive True if this is inclusive, or false if exclusive
-     * @return DataQuery
      */
-    protected function oneFilter(DataQuery $query, $inclusive)
+    protected function oneFilter(DataQuery $query, bool $inclusive): DataQuery
     {
         $this->model = $query->applyRelation($this->relation);
         $field = $this->getDbName();
@@ -47,13 +43,16 @@ class StContainsFilter extends SearchFilter
         // Null comparison check
         if ($value === null) {
             $where = DB::get_conn()->nullCheckClause($field, $inclusive);
+
             return $query->where($where);
         }
 
         // Value comparison check
         $shortName = (new ReflectionClass($this))->getShortName();
         $translationMethod = 'translate' . $shortName;
-        $stMethodHint = preg_match('/^St([a-zA-Z]+)Filter$/', $shortName, $matches) ? $matches[1] : false;
+        $stMethodHint = \preg_match('/^St([a-zA-Z]+)Filter$/', $shortName, $matches)
+            ? $matches[1]
+            : false;
         $where = DB::get_schema()->$translationMethod($field, $value, $inclusive, $stMethodHint);
 
         return $this->aggregate ?

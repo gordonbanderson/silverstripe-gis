@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Tests;
 
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
 
 class TestLocation extends DataObject implements TestOnly
 {

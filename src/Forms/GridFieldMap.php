@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Forms;
 
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridField_HTMLProvider;
-use SilverStripe\Forms\GridField\GridField_DataManipulator;
-use SilverStripe\View\Requirements;
-use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridField_DataManipulator;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\ORM\SS_List;
+use SilverStripe\View\Requirements;
 use Smindel\GIS\GIS;
-use proj4php\Proj4php;
-use proj4php\Proj;
-use proj4php\Point;
 
 /**
  * GridFieldPaginator paginates the {@link GridField} list and adds controls
@@ -21,8 +20,8 @@ use proj4php\Point;
  */
 class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
 {
-    use Injectable;
 
+    use Injectable;
     use Configurable;
 
     protected $attribute;
@@ -32,12 +31,9 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
         $this->attribute = $attribute;
     }
 
-    /**
-     *
-     * @param GridField $gridField
-     * @return array
-     */
-    public function getHTMLFragments($gridField)
+
+    /** @return array */
+    public function getHTMLFragments(GridField $gridField): array
     {
         $srid = GIS::config()->default_srid;
         $proj = GIS::config()->projections[$srid];
@@ -46,7 +42,7 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
         Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet.markercluster.js');
         Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet-search.js');
         Requirements::javascript('smindel/silverstripe-gis: client/dist/js/proj4.js');
-        Requirements::customScript(sprintf('proj4.defs("EPSG:%s", "%s");', $srid, $proj), 'EPSG:' . $srid);
+        Requirements::customScript(\sprintf('proj4.defs("EPSG:%s", "%s");', $srid, $proj), 'EPSG:' . $srid);
         Requirements::javascript('smindel/silverstripe-gis: client/dist/js/GridFieldMap.js');
         Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet.css');
         Requirements::css('smindel/silverstripe-gis: client/dist/css/MarkerCluster.css');
@@ -56,26 +52,38 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
         $defaultLocation = Config::inst()->get(MapField::class, 'default_location');
 
         return array(
-            'before' => sprintf(
+            'before' => \sprintf(
                 '<div class="grid-field-map" data-map-center="%s" data-list="%s" style="z-index:0;"></div>',
                 GIS::create([$defaultLocation['lon'], $defaultLocation['lat']]),
-                htmlentities(
+                \htmlentities(
                     self::get_geojson_from_list(
                         $gridField->getList(),
                         $this->attribute ?: GIS::of($gridField->getList()->dataClass())
                     ),
-                    ENT_QUOTES,
+                    \ENT_QUOTES,
                     'UTF-8'
                 )
             ),
         );
     }
 
+
+    /**
+     * Manipulate the {@link DataList} as needed by this grid modifier.
+     */
+    public function getManipulatedData(GridField $gridField, SS_List $dataList): \SilverStripe\ORM\DataList
+    {
+        return $dataList;
+    }
+
+
     public static function get_geojson_from_list($list, $geometryField = null)
     {
         $modelClass = $list->dataClass();
 
-        $geometryField = $geometryField ?: GIS::of($modelClass);
+        $geometryField = $geometryField
+            ? $geometryField
+            : GIS::of($modelClass);
 
         $collection = [];
 
@@ -93,18 +101,6 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
             ];
         }
 
-        return json_encode($collection);
-    }
-
-    /**
-     * Manipulate the {@link DataList} as needed by this grid modifier.
-     *
-     * @param GridField $gridField
-     * @param SS_List $dataList
-     * @return \SilverStripe\ORM\DataList
-     */
-    public function getManipulatedData(GridField $gridField, SS_List $dataList)
-    {
-        return $dataList;
+        return \json_encode($collection);
     }
 }

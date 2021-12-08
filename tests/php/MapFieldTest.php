@@ -1,23 +1,27 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Tests;
 
-use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Core\Config\Config;
-use Smindel\GIS\GIS;
+use SilverStripe\Dev\SapphireTest;
 use Smindel\GIS\Forms\MapField;
+use Smindel\GIS\GIS;
 
 class MapFieldTest extends SapphireTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         // reset GIS environment
         Config::modify()->set(GIS::class, 'default_srid', 3857);
         Config::modify()->set(MapField::class, 'default_location', ['lon' => 174, 'lat' => -41]);
+
         parent::setUp();
     }
 
-    public function testMapField()
+
+    public function testMapField(): void
     {
         $field = MapField::create('Location', null, GIS::create(['srid' => '2193', 'type' => 'Point', 'coordinates' => [5436343, 1760120]]))
             ->setControl('polyline', false)

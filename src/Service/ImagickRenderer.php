@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Smindel\GIS\Service;
 
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Config\Configurable;
 use Imagick;
 use ImagickDraw;
 use ImagickPixel;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
 
 // @todo: extending imagick makes it a hard dependency, so don't
 
 class ImagickRenderer
 {
-    use Injectable;
 
+    use Injectable;
     use Configurable;
 
     const LIB_NAME = 'Imagick';
@@ -39,26 +41,49 @@ class ImagickRenderer
         $this->image->newImage($this->width, $this->height, new ImagickPixel('rgba(0,0,0,0)'));
         $this->image->setImageFormat('png');
 
-        if ($this->defaultStyle['marker'] ?? 0) {
-            switch ($this->defaultStyle['marker']['offset'][0] ?? 0) {
-                case 'left': $this->defaultStyle['marker_offset_x'] = 0; break;
-                case 'center': $this->defaultStyle['marker_offset_x'] = getimagesize($this->defaultStyle['marker']['image'])[0] / 2; break;
-                case 'right': $this->defaultStyle['marker_offset_x'] = getimagesize($this->defaultStyle['marker']['image'])[0]; break;
-                default: $this->defaultStyle['marker_offset_x'] = $this->defaultStyle['marker']['offset'][0] ?? 0;
-            }
-            switch ($this->defaultStyle['marker']['offset'][1] ?? 0) {
-                case 'top': $this->defaultStyle['marker_offset_y'] = 0; break;
-                case 'middle': $this->defaultStyle['marker_offset_y'] = getimagesize($this->defaultStyle['marker']['image'])[1] / 2; break;
-                case 'bottom': $this->defaultStyle['marker_offset_y'] = getimagesize($this->defaultStyle['marker']['image'])[1]; break;
-                default: $this->defaultStyle['marker_offset_y'] = $this->defaultStyle['marker']['offset'][0] ?? 0;
-            }
-
-            $this->defaultStyle['marker_image'] = new Imagick();
-            $this->defaultStyle['marker_image']->readImage($this->defaultStyle['marker']['image']);
+        if (!($this->defaultStyle['marker'] ?? 0)) {
+            return;
         }
+
+        switch ($this->defaultStyle['marker']['offset'][0] ?? 0) {
+            case 'left':
+                $this->defaultStyle['marker_offset_x'] = 0;
+
+                break;
+            case 'center':
+                $this->defaultStyle['marker_offset_x'] = \getimagesize($this->defaultStyle['marker']['image'])[0] / 2;
+
+                break;
+            case 'right':
+                $this->defaultStyle['marker_offset_x'] = \getimagesize($this->defaultStyle['marker']['image'])[0];
+
+                break;
+            default:
+                $this->defaultStyle['marker_offset_x'] = $this->defaultStyle['marker']['offset'][0] ?? 0;
+        }
+        switch ($this->defaultStyle['marker']['offset'][1] ?? 0) {
+            case 'top':
+                $this->defaultStyle['marker_offset_y'] = 0;
+
+                break;
+            case 'middle':
+                $this->defaultStyle['marker_offset_y'] = \getimagesize($this->defaultStyle['marker']['image'])[1] / 2;
+
+                break;
+            case 'bottom':
+                $this->defaultStyle['marker_offset_y'] = \getimagesize($this->defaultStyle['marker']['image'])[1];
+
+                break;
+            default:
+                $this->defaultStyle['marker_offset_y'] = $this->defaultStyle['marker']['offset'][0] ?? 0;
+        }
+
+        $this->defaultStyle['marker_image'] = new Imagick();
+        $this->defaultStyle['marker_image']->readImage($this->defaultStyle['marker']['image']);
     }
 
-    public function debug($text)
+
+    public function debug($text): void
     {
         $draw = new ImagickDraw();
         $draw->setStrokeOpacity(1);
@@ -85,10 +110,12 @@ class ImagickRenderer
         $this->image->drawImage($draw);
     }
 
+
     public function getContentType()
     {
         return 'image/png';
     }
+
 
     public function getDraw(&$style)
     {
@@ -96,40 +123,44 @@ class ImagickRenderer
             return $style;
         }
 
-        $style = array_merge($this->defaultStyle, $style);
+        $style = \array_merge($this->defaultStyle, $style);
 
         $draw = new ImagickDraw();
 
         foreach ($style as $key => $value) {
-            if (substr($key, -5) == 'Color') {
+            if (\substr($key, -5) === 'Color') {
                 $value = new ImagickPixel($value);
             }
 
-            if ($value !== null) {
-                if (!is_array($value)) {
-                    $value = [$value];
-                }
-                if (method_exists($draw, $key)) {
-                    $draw->$key(...$value);
-                } elseif (method_exists($draw, 'set' . $key)) {
-                    $draw->{'set' . $key}(...$value);
-                }
+            if ($value === null) {
+                continue;
+            }
+
+            if (!\is_array($value)) {
+                $value = [$value];
+            }
+            if (\method_exists($draw, $key)) {
+                $draw->$key(...$value);
+            } elseif (\method_exists($draw, 'set' . $key)) {
+                $draw->{'set' . $key}(...$value);
             }
         }
 
         return $draw;
     }
 
-    public function drawMarker($coordinates, $style = [])
+
+    public function drawMarker($coordinates, $style = []): void
     {
-        if (!count($style)) {
+        if (!\count($style)) {
             $this->getDraw($style);
         }
 
         $this->image->compositeImage($style['marker_image'], imagick::COMPOSITE_OVER, $coordinates[0] - $style['marker_offset_x'], $coordinates[1] - $style['marker_offset_y']);
     }
 
-    public function drawCircle($coordinates, $style = [])
+
+    public function drawCircle($coordinates, $style = []): void
     {
         $draw = $this->getDraw($style);
 
@@ -139,7 +170,8 @@ class ImagickRenderer
         $this->image->drawImage($draw);
     }
 
-    public function drawPoint($coordinates, $style = [])
+
+    public function drawPoint($coordinates, $style = []): void
     {
         $this->getDraw($style);
 
@@ -150,7 +182,8 @@ class ImagickRenderer
         }
     }
 
-    public function drawLineString($coordinates, $style = [])
+
+    public function drawLineString($coordinates, $style = []): void
     {
         $draw = $this->getDraw($style);
 
@@ -164,13 +197,14 @@ class ImagickRenderer
         $this->image->drawImage($draw);
     }
 
-    public function drawPolygon($coordinates, $style = [])
+
+    public function drawPolygon($coordinates, $style = []): void
     {
         $draw = $this->getDraw($style);
 
         $draw->pathStart();
         foreach ($coordinates as $ring) {
-            $draw->pathMoveToAbsolute(...array_shift($ring));
+            $draw->pathMoveToAbsolute(...\array_shift($ring));
             foreach ($ring as $point) {
                 $draw->pathLineToAbsolute(...$point);
             }
@@ -180,26 +214,30 @@ class ImagickRenderer
         $this->image->drawImage($draw);
     }
 
-    public function drawMultipoint($multiCoordinates, $style = [])
+
+    public function drawMultipoint($multiCoordinates, $style = []): void
     {
         foreach ($multiCoordinates as $coordinates) {
             $this->drawPoint($coordinates, $style);
         }
     }
 
-    public function drawMultilinestring($multiCoordinates, $style = [])
+
+    public function drawMultilinestring($multiCoordinates, $style = []): void
     {
         foreach ($multiCoordinates as $coordinates) {
             $this->drawLinestring($coordinates, $style);
         }
     }
 
-    public function drawMultipolygon($multiCoordinates, $style = [])
+
+    public function drawMultipolygon($multiCoordinates, $style = []): void
     {
         foreach ($multiCoordinates as $coordinates) {
             $this->drawPolygon($coordinates, $style);
         }
     }
+
 
     public function getImageBlob()
     {
