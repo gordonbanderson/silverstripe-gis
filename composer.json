@@ -1,5 +1,5 @@
 {
-    "name": "smindel/silverstripe-gis",
+    "name": "smindel\/silverstripe-gis",
     "description": "Geographic types for SilverStripe",
     "type": "silverstripe-vendormodule",
     "keywords": [
@@ -13,12 +13,17 @@
     ],
     "license": "MIT",
     "require": {
-        "silverstripe/framework": ">=4 <4.3.1 || >=4.3.3",
-        "silverstripe/vendor-plugin": "^1.0",
-        "proj4php/proj4php": "^2.0"
+        "silverstripe\/framework": ">=4 <4.3.1 || >=4.3.3",
+        "silverstripe\/vendor-plugin": "^1.0",
+        "proj4php\/proj4php": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7"
+        "phpunit\/phpunit": "~5.7",
+        "slevomat\/coding-standard": "^7.0",
+        "php-parallel-lint\/php-parallel-lint": "^1.3",
+        "php-parallel-lint\/php-console-highlighter": "^0.5.0",
+        "phpstan\/phpstan-strict-rules": "^1.1",
+        "phpstan\/extension-installer": "^1.1"
     },
     "suggest": {
         "ext-gd": "to use GD library based tile rendering.",
@@ -31,8 +36,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Smindel\\GIS\\": "src/",
-            "Smindel\\GIS\\Tests\\": "tests/php/"
+            "Smindel\\GIS\\": "src\/",
+            "Smindel\\GIS\\Tests\\": "tests\/php\/"
         }
+    },
+    "scripts": {
+        "checkcs": "vendor\/bin\/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "fixcs": "vendor\/bin\/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests",
+        "checkCode": "composer checkcs && composer lint && composer phpstan",
+        "lint": "vendor\/bin\/parallel-lint src\/ tests\/",
+        "phpstan": "vendor\/bin\/phpstan analyse --level=6 -c tests\/phpstan.neon src\/"
     }
 }
