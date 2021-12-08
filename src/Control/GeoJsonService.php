@@ -8,9 +8,9 @@ use Smindel\GIS\GIS;
 
 class GeoJsonService extends AbstractGISWebServiceController
 {
-    private static $url_handlers = array(
-        '$Model' => 'handleAction';
-    private );
+    private static $url_handlers = [
+        '$Model' => 'handleAction',
+    ];
 
     public function getConfig($model)
     {

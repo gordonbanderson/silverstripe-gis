@@ -13,10 +13,10 @@ use Smindel\GIS\Service\Tile;
 
 class WebMapTileService extends AbstractGISWebServiceController
 {
-    private static $url_handlers = array(
-        '$Model//$ID!/$z!/$x!/$y!' => 'handleAction';
-    private '$Model//$z!/$x!/$y!' => 'handleAction';
-    private );
+    private static $url_handlers = [
+        '$Model//$ID!/$z!/$x!/$y!' => 'handleAction',
+     '$Model//$z!/$x!/$y!' => 'handleAction',
+    ] ;
 
     /**
      * Buffer in pixel by wich the tile box is enlarged, which is used for
