@@ -60,6 +60,7 @@ class MapField extends FormField
         $this->setAttribute($type, $type);
         $srid = GIS::config()->default_srid;
         $proj = GIS::config()->projections[$srid];
+        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/mapfield-common.js');
         Requirements::javascript('smindel/silverstripe-gis: client/dist/js/mapfield.js');
         Requirements::customScript(sprintf('proj4.defs("EPSG:%s", "%s");', $srid, $proj), 'EPSG:' . $srid);
         Requirements::css('smindel/silverstripe-gis: client/dist/css/mapfield.css');

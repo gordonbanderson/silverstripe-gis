@@ -14,8 +14,12 @@ const mix = require('laravel-mix');
 mix.combine([
     'client/resources/js/leaflet.js',
     'client/resources/js/leaflet-search.js',
-    'client/resources/js/leaflet.draw.1.0.4.js',
     'client/resources/js/proj4.js',
+], 'client/dist/js/mapfield-common.js')
+
+.combine([
+
+    'client/resources/js/leaflet.draw.1.0.4.js',
     'client/resources/js/wicket.js',
     'client/resources/js/MapField.js',
     ], 'client/dist/js/mapfield.js')
@@ -29,10 +33,7 @@ mix.combine([
 
 
     .combine([
-        'client/resources/js/leaflet.js',
         'client/resources/js/leaflet.markercluster.js',
-        'client/resources/js/leaflet-search.js',
-        'client/resources/js/proj4.js',
         'client/resources/js/GridFieldMap.js',
     ], 'client/dist/js/gridfieldmap.js')
 
