@@ -20,4 +20,12 @@ input.mapfield_readonly:focus {
 
 .form__field-holder > .map-field-widget:hover {
     height: 75vh;
+    transition: height 0.2s;
+    transition-timing-function: ease-out
+}
+
+.form__field-holder > .map-field-widget:not(:hover) {
+    height: 25vh;
+    transition: height 0.2s;
+    transition-timing-function: ease-in;
 }
