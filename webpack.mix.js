@@ -25,7 +25,7 @@ mix.combine([
         'client/resources/css/leaflet-search.css',
         'client/resources/css/leaflet.draw.1.0.4.css',
         'client/resources/css/MapField.css'
-    ], 'client/dist/js/mapfield.css')
+    ], 'client/dist/css/mapfield.css')
 
 
     .combine([
@@ -41,6 +41,6 @@ mix.combine([
         'client/resources/css/MarkerCluster.css',
         'client/resources/css/MarkerCluster.Default.css',
         'client/resources/css/leaflet-search.css',
-    ], 'client/dist/js/gridfieldmap.css')
+    ], 'client/dist/css/gridfieldmap.css')
 
 ;
