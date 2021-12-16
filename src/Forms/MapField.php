@@ -60,17 +60,9 @@ class MapField extends FormField
         $this->setAttribute($type, $type);
         $srid = GIS::config()->default_srid;
         $proj = GIS::config()->projections[$srid];
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet-search.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet.draw.1.0.4.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/proj4.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/wicket.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/MapField.js');
+        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/mapfield.js');
         Requirements::customScript(sprintf('proj4.defs("EPSG:%s", "%s");', $srid, $proj), 'EPSG:' . $srid);
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet-search.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet.draw.1.0.4.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/MapField.css');
+        Requirements::css('smindel/silverstripe-gis: client/dist/css/mapfield.css');
         return parent::Field($properties);
     }
 
