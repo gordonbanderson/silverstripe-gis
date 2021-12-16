@@ -18,6 +18,11 @@ mix.combine([
 ], 'client/dist/js/mapfield-common.js')
 
 .combine([
+    'client/resources/css/leaflet.css',
+    'client/resources/css/leaflet-search.css'
+], 'client/dist/css/mapfield-common.css')
+
+.combine([
 
     'client/resources/js/leaflet.draw.1.0.4.js',
     'client/resources/js/wicket.js',
@@ -25,8 +30,6 @@ mix.combine([
     ], 'client/dist/js/mapfield.js')
 
     .combine([
-        'client/resources/css/leaflet.css',
-        'client/resources/css/leaflet-search.css',
         'client/resources/css/leaflet.draw.1.0.4.css',
         'client/resources/css/MapField.css'
     ], 'client/dist/css/mapfield.css')
@@ -38,10 +41,8 @@ mix.combine([
     ], 'client/dist/js/gridfieldmap.js')
 
     .combine([
-        'client/resources/css/leaflet.css',
         'client/resources/css/MarkerCluster.css',
         'client/resources/css/MarkerCluster.Default.css',
-        'client/resources/css/leaflet-search.css',
     ], 'client/dist/css/gridfieldmap.css')
 
 ;

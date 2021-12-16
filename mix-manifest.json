@@ -1,5 +1,6 @@
 {
     "/client/dist/js/mapfield-common.js": "/client/dist/js/mapfield-common.js",
+    "/client/dist/css/mapfield-common.css": "/client/dist/css/mapfield-common.css",
     "/client/dist/js/mapfield.js": "/client/dist/js/mapfield.js",
     "/client/dist/css/mapfield.css": "/client/dist/css/mapfield.css",
     "/client/dist/js/gridfieldmap.js": "/client/dist/js/gridfieldmap.js",
