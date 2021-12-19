@@ -12,25 +12,25 @@ const mix = require('laravel-mix');
  */
 
 mix.combine([
-    'client/resources/js/leaflet.js',
-    'client/resources/js/leaflet-search.js',
-    'client/resources/js/proj4.js',
+    'node_modules/leaflet/dist/leaflet.js',
+    'node_modules/leaflet-search/src/leaflet-search.js',
+    'node_modules/proj4/dist/proj4.js',
 ], 'client/dist/js/mapfield-common.js')
 
 .combine([
-    'client/resources/css/leaflet.css',
-    'client/resources/css/leaflet-search.css'
+    'node_modules/leaflet/dist/leaflet.css',
+    'node_modules/leaflet-search/src/leaflet-search.css'
 ], 'client/dist/css/mapfield-common.css')
 
 .combine([
 
-    'client/resources/js/leaflet.draw.1.0.4.js',
-    'client/resources/js/wicket.js',
+    'node_modules/leaflet-draw/dist/leaflet.draw-src.js',
+    'node_modules/wicket/wicket.js',
     'client/resources/js/MapField.js',
     ], 'client/dist/js/mapfield.js')
 
     .combine([
-        'client/resources/css/leaflet.draw.1.0.4.css',
+        'node_modules/leaflet-draw/dist/leaflet.draw-src.css',
         'client/resources/css/MapField.css'
     ], 'client/dist/css/mapfield.css')
 
@@ -44,5 +44,6 @@ mix.combine([
         'client/resources/css/MarkerCluster.css',
         'client/resources/css/MarkerCluster.Default.css',
     ], 'client/dist/css/gridfieldmap.css')
-
+    .copyDirectory('node_modules/leaflet-draw/dist/images', 'client/dist/css/images')
+    .copyDirectory('node_modules/leaflet-search/images/', 'client/dist/images')
 ;
