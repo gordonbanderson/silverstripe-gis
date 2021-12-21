@@ -17,6 +17,7 @@
     "wicket": "^1.3.8"
   },
   "dependencies": {
-    "leaflet-draw": "^1.0.4"
+    "leaflet-draw": "^1.0.4",
+    "leaflet.markercluster": "^1.5.3"
   }
 }
