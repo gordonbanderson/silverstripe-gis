@@ -76,7 +76,10 @@ jQuery(function($) {
 
                 var me = this;
 
-                var map = L.map(this[0], { worldCopyJump: true, maxBoundsViscosity: 1.0 });
+                var map = L.map(this[0], {  fullscreenControl: true,
+                    fullscreenControlOptions: {
+                        position: 'topleft'
+                    }, worldCopyJump: true, maxBoundsViscosity: 1.0 });
                 var streets = L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png');
                 var satellite = L.tileLayer('//{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                     maxZoom: 20,
