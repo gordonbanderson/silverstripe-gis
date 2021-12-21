@@ -17,5 +17,6 @@
     "/client/dist/images/leaflet-search.jpg": "/client/dist/images/leaflet-search.jpg",
     "/client/dist/images/loader.gif": "/client/dist/images/loader.gif",
     "/client/dist/images/search-icon-mobile.png": "/client/dist/images/search-icon-mobile.png",
-    "/client/dist/images/search-icon.png": "/client/dist/images/search-icon.png"
+    "/client/dist/images/search-icon.png": "/client/dist/images/search-icon.png",
+    "/client/dist/css/icon-fullscreen.svg": "/client/dist/css/icon-fullscreen.svg"
 }
