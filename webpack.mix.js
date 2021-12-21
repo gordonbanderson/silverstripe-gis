@@ -15,11 +15,13 @@ mix.combine([
     'node_modules/leaflet/dist/leaflet.js',
     'node_modules/leaflet-search/src/leaflet-search.js',
     'node_modules/proj4/dist/proj4.js',
+    'node_modules/leaflet.fullscreen/Control.FullScreen.js'
 ], 'client/dist/js/mapfield-common.js')
 
 .combine([
     'node_modules/leaflet/dist/leaflet.css',
-    'node_modules/leaflet-search/src/leaflet-search.css'
+    'node_modules/leaflet-search/src/leaflet-search.css',
+    'node_modules/leaflet.fullscreen/Control.FullScreen.css'
 ], 'client/dist/css/mapfield-common.css')
 
 .combine([
@@ -46,4 +48,5 @@ mix.combine([
 
     .copyDirectory('node_modules/leaflet-draw/dist/images', 'client/dist/css/images')
     .copyDirectory('node_modules/leaflet-search/images/', 'client/dist/images')
+    .copy('node_modules/leaflet.fullscreen/icon-fullscreen.svg', 'client/dist/css')
 ;
