@@ -182,6 +182,10 @@ class GIS
 
     /**
      * reproject an array representation of a geometry to the given srid
+     *
+     * @param int $toSrid the SRID being projected to
+     * @return GIS|null either a reprojected coordinate, or null if there is no geographical information for this item
+     * @throws Exception
      */
     public function reproject($toSrid = 4326)
     {
@@ -189,19 +193,25 @@ class GIS
         $fromCoordinates = $this->coordinates;
         $type = $this->type;
 
-        if ($fromSrid != $toSrid) {
-            $fromProj = self::get_proj4($fromSrid);
-            $toProj = self::get_proj4($toSrid);
-            $toCoordinates = self::reproject_array($fromCoordinates, $fromProj, $toProj);
-        } else {
-            $toCoordinates = $fromCoordinates;
+        $result = null;
+
+        if (!is_null($fromSrid)) {
+            if ($fromSrid != $toSrid) {
+                $fromProj = self::get_proj4($fromSrid);
+                $toProj = self::get_proj4($toSrid);
+                $toCoordinates = self::reproject_array($fromCoordinates, $fromProj, $toProj);
+            } else {
+                $toCoordinates = $fromCoordinates;
+            }
+
+            $result = GIS::create([
+                'srid' => $toSrid,
+                'type' => $type,
+                'coordinates' => $toCoordinates,
+            ]);
         }
 
-        return GIS::create([
-            'srid' => $toSrid,
-            'type' => $type,
-            'coordinates' => $toCoordinates,
-        ]);
+        return $result;
     }
 
     /**
