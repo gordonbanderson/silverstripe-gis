@@ -23,7 +23,6 @@ mix.combine([
 ], 'client/dist/css/mapfield-common.css')
 
 .combine([
-
     'node_modules/leaflet-draw/dist/leaflet.draw-src.js',
     'node_modules/wicket/wicket.js',
     'client/resources/js/MapField.js',
@@ -36,14 +35,15 @@ mix.combine([
 
 
     .combine([
-        'client/resources/js/leaflet.markercluster.js',
+        'node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js',
         'client/resources/js/GridFieldMap.js',
     ], 'client/dist/js/gridfieldmap.js')
 
     .combine([
-        'client/resources/css/MarkerCluster.css',
-        'client/resources/css/MarkerCluster.Default.css',
+        'node_modules/leaflet.markercluster/dist/MarkerCluster.css',
+        'node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css',
     ], 'client/dist/css/gridfieldmap.css')
+
     .copyDirectory('node_modules/leaflet-draw/dist/images', 'client/dist/css/images')
     .copyDirectory('node_modules/leaflet-search/images/', 'client/dist/images')
 ;
