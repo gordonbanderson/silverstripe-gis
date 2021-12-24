@@ -1,0 +1,22 @@
+{
+    "/client/dist/js/mapfield-common.js": "/client/dist/js/mapfield-common.js",
+    "/client/dist/css/mapfield-common.css": "/client/dist/css/mapfield-common.css",
+    "/client/dist/js/mapfield.js": "/client/dist/js/mapfield.js",
+    "/client/dist/css/mapfield.css": "/client/dist/css/mapfield.css",
+    "/client/dist/js/gridfieldmap.js": "/client/dist/js/gridfieldmap.js",
+    "/client/dist/css/gridfieldmap.css": "/client/dist/css/gridfieldmap.css",
+    "/client/dist/css/images/layers-2x.png": "/client/dist/css/images/layers-2x.png",
+    "/client/dist/css/images/layers.png": "/client/dist/css/images/layers.png",
+    "/client/dist/css/images/marker-icon-2x.png": "/client/dist/css/images/marker-icon-2x.png",
+    "/client/dist/css/images/marker-icon.png": "/client/dist/css/images/marker-icon.png",
+    "/client/dist/css/images/marker-shadow.png": "/client/dist/css/images/marker-shadow.png",
+    "/client/dist/css/images/spritesheet-2x.png": "/client/dist/css/images/spritesheet-2x.png",
+    "/client/dist/css/images/spritesheet.png": "/client/dist/css/images/spritesheet.png",
+    "/client/dist/css/images/spritesheet.svg": "/client/dist/css/images/spritesheet.svg",
+    "/client/dist/images/back.png": "/client/dist/images/back.png",
+    "/client/dist/images/leaflet-search.jpg": "/client/dist/images/leaflet-search.jpg",
+    "/client/dist/images/loader.gif": "/client/dist/images/loader.gif",
+    "/client/dist/images/search-icon-mobile.png": "/client/dist/images/search-icon-mobile.png",
+    "/client/dist/images/search-icon.png": "/client/dist/images/search-icon.png",
+    "/client/dist/css/icon-fullscreen.svg": "/client/dist/css/icon-fullscreen.svg"
+}

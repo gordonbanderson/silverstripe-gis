@@ -17,9 +17,22 @@ jQuery(function($) {
             }
             center = [center[1], center[0]];
 
-            this.css({width:'100%', height:'150px', transition:'1s height'});
+            this.css({width:'100%', height:'400px'});
+            
+            var map = L.map(this[0], {
+                fullscreenControl: true,
+                fullscreenControlOptions: {
+                    position: 'topleft'
+                }
+            }).setView(center, 13);
 
-            var map = L.map(this[0]).setView(center, 13);
+            map.on('enterFullscreen', function(e){
+                $('.grid-field-map').css({ height:'100% !important'});
+            });
+
+            map.on('exitFullscreen', function(e){
+                $('.grid-field-map').css({ height:'400px'});
+            });
 
             var streets = L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
             var satelite = L.tileLayer('//{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
@@ -70,10 +83,6 @@ jQuery(function($) {
               minLength: 2
             }));
 
-            this.hover(
-                function(){ $(this).css({height:'400px'});var timer = setInterval(function(){map.invalidateSize()},5); setTimeout(function(){clearInterval(timer)}, 1000); },
-                function(){ $(this).css({height:'150px'});var timer = setInterval(function(){map.invalidateSize()},5); setTimeout(function(){clearInterval(timer)}, 1000); }
-            );
         }
       });
     });

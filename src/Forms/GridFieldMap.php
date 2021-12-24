@@ -42,16 +42,12 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
         $srid = GIS::config()->default_srid;
         $proj = GIS::config()->projections[$srid];
 
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet.markercluster.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/leaflet-search.js');
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/proj4.js');
+        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/mapfield-common.js');
+        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/gridfieldmap.js');
         Requirements::customScript(sprintf('proj4.defs("EPSG:%s", "%s");', $srid, $proj), 'EPSG:' . $srid);
-        Requirements::javascript('smindel/silverstripe-gis: client/dist/js/GridFieldMap.js');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/MarkerCluster.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/MarkerCluster.Default.css');
-        Requirements::css('smindel/silverstripe-gis: client/dist/css/leaflet-search.css');
+
+        Requirements::css('smindel/silverstripe-gis: client/dist/css/mapfield-common.css');
+        Requirements::css('smindel/silverstripe-gis: client/dist/css/gridfieldmap.css');
 
         $defaultLocation = Config::inst()->get(MapField::class, 'default_location');
 
@@ -74,7 +70,6 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
     public static function get_geojson_from_list($list, $geometryField = null)
     {
         $modelClass = $list->dataClass();
-
         $geometryField = $geometryField ?: GIS::of($modelClass);
 
         $collection = [];
@@ -86,11 +81,13 @@ class GridFieldMap implements GridField_HTMLProvider, GridField_DataManipulator
 
             $geo = GIS::create($item->$geometryField)->reproject(4326);
 
-            $collection[$item->ID] = [
-                $item->Title,
-                $geo->type,
-                $geo->coordinates,
-            ];
+            if (!is_null($geo)) {
+                $collection[$item->ID] = [
+                    $item->Title,
+                    $geo->type,
+                    $geo->coordinates,
+                ];
+            }
         }
 
         return json_encode($collection);
